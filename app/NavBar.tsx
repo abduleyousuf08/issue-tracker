@@ -1,12 +1,19 @@
-import Link from 'next/link';
+'use client';
+
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { AiFillBug } from 'react-icons/ai';
+import classNames from 'classnames';
 
 function NavBar() {
+   const currentPath = usePathname();
+
    const links = [
-      { label: 'Dashboard', href: '/dashboard' },
-      { label: 'Issue', href: '/issue' },
+      { label: 'Dashboard', href: '/' },
+      { label: 'Issues', href: '/issues' },
    ];
+
    return (
       <nav className='flex border-b mb-5 space-x-6 px-5 h-14 items-center'>
          <Link href='/'>
@@ -17,7 +24,11 @@ function NavBar() {
                <Link
                   href={link.href}
                   key={link.href}
-                  className='text-zinc-500 hover:text-zinc-800 transition-colors'
+                  className={classNames({
+                     'text-zinc-900': link.href === currentPath,
+                     'text-zinc-500': link.href !== currentPath,
+                     'hover:text-zinc-600': true,
+                  })}
                >
                   {link.label}
                </Link>
