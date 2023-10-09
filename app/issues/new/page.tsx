@@ -20,6 +20,8 @@ type IssueForm = z.infer<typeof createIssueSchema>;
 
 function NewIssuePage() {
    const router = useRouter();
+
+   //Todo: useForm hook setup
    const {
       register,
       control,
@@ -28,8 +30,22 @@ function NewIssuePage() {
    } = useForm<IssueForm>({
       resolver: zodResolver(createIssueSchema),
    });
+
+   //Todo:States
    const [error, setError] = useState('');
    const [isSubmiting, setIsSubmiting] = useState(false);
+
+   //Todo: to Submit an issue
+   const onSubmit = handleSubmit(async (data) => {
+      try {
+         setIsSubmiting(true);
+         await axios.post('/api/issues', data);
+         router.push('/issues');
+      } catch (error) {
+         setIsSubmiting(false);
+         setError('An expected error occured.');
+      }
+   });
 
    return (
       <div className='max-w-xl '>
@@ -38,19 +54,7 @@ function NewIssuePage() {
                <Callout.Text>{error}</Callout.Text>
             </Callout.Root>
          )}
-         <form
-            className='max-w-xl space-y-3'
-            onSubmit={handleSubmit(async (data) => {
-               try {
-                  setIsSubmiting(true);
-                  await axios.post('/api/issues', data);
-                  router.push('/issues');
-               } catch (error) {
-                  setIsSubmiting(false);
-                  setError('An expected error occured.');
-               }
-            })}
-         >
+         <form className='max-w-xl space-y-3' onSubmit={onSubmit}>
             <TextField.Root>
                <TextField.Input placeholder='Title' {...register('title')} />
             </TextField.Root>
