@@ -1,8 +1,9 @@
+import React from 'react';
 import IssueStatusBadge from '@/app/components/IssueStatusBadge';
 import prisma from '@/prisma/client';
 import { Heading, Text, Flex, Card } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
-import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface Props {
    params: { id: string };
@@ -13,7 +14,7 @@ async function IssueDetailPage({ params }: Props) {
       where: { id: +params.id },
    });
 
-   //Todo: checking if issue not found and calling built-in function notFound
+   //Todo: checking if the issue is not found and calling built-in function notFound
    if (!issue) notFound();
 
    return (
@@ -23,8 +24,8 @@ async function IssueDetailPage({ params }: Props) {
             <IssueStatusBadge status={issue.status} />
             <Text>{issue.createdAt.toDateString()}</Text>
          </Flex>
-         <Card>
-            <Text>{issue.description}</Text>
+         <Card className='prose' mt='4'>
+            <ReactMarkdown>{issue.description}</ReactMarkdown>
          </Card>
       </div>
    );
