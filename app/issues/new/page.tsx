@@ -8,7 +8,7 @@ import 'easymde/dist/easymde.min.css';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import SimpleMDE from 'react-simplemde-editor';
+import dynamic from 'next/dynamic';
 import { z } from 'zod';
 import delay from 'delay';
 
@@ -16,9 +16,13 @@ import delay from 'delay';
 import ErrorMessage from '@/app/components/ErrorMessage';
 import Loader from '@/app/components/Loader';
 
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
+   ssr: false,
+});
+
 type IssueForm = z.infer<typeof createIssueSchema>;
 
-async function NewIssuePage() {
+function NewIssuePage() {
    const router = useRouter();
 
    //Todo: useForm hook setup
@@ -46,8 +50,6 @@ async function NewIssuePage() {
          setError('An expected error occured.');
       }
    });
-
-   await delay(2000);
 
    return (
       <div className='max-w-xl '>
