@@ -1,16 +1,16 @@
 'use client';
 
-import React from 'react';
-import { useState } from 'react';
-import { TextField, Button, Callout, Text } from '@radix-ui/themes';
-import SimpleMDE from 'react-simplemde-editor';
-import { useForm, Controller } from 'react-hook-form';
+import { createIssueSchema } from '@/app/ValidationSchemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Callout, TextField } from '@radix-ui/themes';
 import axios from 'axios';
 import 'easymde/dist/easymde.min.css';
 import { useRouter } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { createIssueSchema } from '@/app/ValidationSchemas';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import SimpleMDE from 'react-simplemde-editor';
 import { z } from 'zod';
+import delay from 'delay';
 
 //*COMPONENTS
 import ErrorMessage from '@/app/components/ErrorMessage';
@@ -18,7 +18,7 @@ import Loader from '@/app/components/Loader';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
-function NewIssuePage() {
+async function NewIssuePage() {
    const router = useRouter();
 
    //Todo: useForm hook setup
@@ -46,6 +46,8 @@ function NewIssuePage() {
          setError('An expected error occured.');
       }
    });
+
+   await delay(2000);
 
    return (
       <div className='max-w-xl '>
