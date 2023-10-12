@@ -1,6 +1,6 @@
 'use client';
 
-import { createIssueSchema } from '@/app/ValidationSchemas';
+import { issueSchema } from '@/app/ValidationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Callout, TextField } from '@radix-ui/themes';
 import axios from 'axios';
@@ -20,7 +20,7 @@ const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
    ssr: false,
 });
 
-type IssueFormData = z.infer<typeof createIssueSchema>;
+type IssueFormData = z.infer<typeof issueSchema>;
 
 interface Props {
    issue?: Issue;
