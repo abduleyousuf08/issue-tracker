@@ -3,8 +3,8 @@ import { Table, TableHeader } from '@radix-ui/themes';
 import delay from 'delay';
 
 //*COMPONENTS
-import IssueStatusBadge from '../components/IssueStatusBadge';
-import Link from '../components/Link';
+import IssueStatusBadge from '../../components/IssueStatusBadge';
+import Link from '../../components/Link';
 import IssueActions from './IssueActions';
 
 async function IssuesPage() {
