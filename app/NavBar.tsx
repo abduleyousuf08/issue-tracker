@@ -56,6 +56,7 @@ function NavBar() {
                               className='cursor-pointer'
                               src={session.user?.image!}
                               fallback='?'
+                              referrerPolicy='no-referrer'
                            />
                         </DropdownMenu.Trigger>
                         <DropdownMenu.Content>
