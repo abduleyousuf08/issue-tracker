@@ -31,7 +31,7 @@ async function IssuesPage() {
                      <Table.Cell>
                         <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
 
-                        <div className='block md:hidde mt-2'>
+                        <div className='block md:hidden mt-2'>
                            <IssueStatusBadge status={issue.status} />
                         </div>
                      </Table.Cell>

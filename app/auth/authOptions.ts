@@ -2,6 +2,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import prisma from '@/prisma/client';
 import { NextAuthOptions } from 'next-auth';
+import { custom } from 'openid-client';
 
 const authOptions: NextAuthOptions = {
    adapter: PrismaAdapter(prisma),
@@ -15,5 +16,9 @@ const authOptions: NextAuthOptions = {
       strategy: 'jwt',
    },
 };
+
+custom.setHttpOptionsDefaults({
+   timeout: 18000,
+});
 
 export default authOptions;
