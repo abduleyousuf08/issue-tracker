@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateIssue } from '@/app/ValidationSchemas';
+import { updateIssueSchema } from '@/app/ValidationSchemas';
 import prisma from '@/prisma/client';
 import authOptions from '@/app/auth/authOptions';
 import { getServerSession } from 'next-auth';
@@ -8,13 +8,27 @@ export async function PATCH(
    request: NextRequest,
    { params }: { params: { id: string } }
 ) {
+   //* STATES
+   const body = await request.json();
+   const { assignedToUserId } = body;
+   const validation = updateIssueSchema.safeParse(body);
    const session = await getServerSession(authOptions);
 
+   //? session validation
    if (!session) return NextResponse.json({}, { status: 401 });
 
-   const body = await request.json();
-   const validation = updateIssue.safeParse(body);
+   //Todo: assigned user validation
+   if (assignedToUserId) {
+      const user = await prisma.user.findUnique({
+         where: { id: assignedToUserId },
+      });
 
+      if (!user) {
+         return NextResponse.json('Invalid user.', { status: 400 });
+      }
+   }
+
+   //? Validation status checking
    if (!validation.success) {
       return NextResponse.json(validation.error.format(), { status: 400 });
    }
@@ -32,11 +46,14 @@ export async function PATCH(
       data: {
          title: body.title || issue.title,
          description: body.description || issue.description,
+         assignedToUserId: assignedToUserId || null,
       },
    });
 
    return NextResponse.json(updatedIssue);
 }
+
+//Todo: Delete functionality
 
 export async function DELETE(
    request: NextRequest,
