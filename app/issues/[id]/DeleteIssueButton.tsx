@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
 import { AlertDialog, Button, Flex } from '@radix-ui/themes';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 //*COMPONENTS
 import Loader from '@/app/components/Loader';
