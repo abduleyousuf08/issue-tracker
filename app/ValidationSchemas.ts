@@ -6,7 +6,7 @@ export const issueSchema = z.object({
    description: z.string().min(1).max(65535),
 });
 
-export const updateIssueSchema = z.object({
+export const patchIssueSchema = z.object({
    title: z.string().min(1).max(255).optional(),
    description: z.string().min(1).max(65535).optional(),
    assignedToUserId: z

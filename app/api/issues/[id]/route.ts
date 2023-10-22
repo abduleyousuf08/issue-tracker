@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateIssueSchema } from '@/app/ValidationSchemas';
+import { patchIssueSchema } from '@/app/ValidationSchemas';
 import prisma from '@/prisma/client';
 import authOptions from '@/app/auth/authOptions';
 import { getServerSession } from 'next-auth';
@@ -11,7 +11,7 @@ export async function PATCH(
    //* STATES
    const body = await request.json();
    const { assignedToUserId } = body;
-   const validation = updateIssueSchema.safeParse(body);
+   const validation = patchIssueSchema.safeParse(body);
    const session = await getServerSession(authOptions);
 
    //? session validation
@@ -46,7 +46,7 @@ export async function PATCH(
       data: {
          title: body.title || issue.title,
          description: body.description || issue.description,
-         assignedToUserId: assignedToUserId || null,
+         assignedToUserId: assignedToUserId,
       },
    });
 
