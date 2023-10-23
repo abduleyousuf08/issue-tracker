@@ -24,7 +24,7 @@ function AssigneeSelect({ issue }: { issue: Issue }) {
 
    if (error) return null;
 
-   const assignIssue = (userId: string | false) => {
+   const assignIssue = (userId: string) => {
       axios
          .patch('/api/issues/' + issue.id, {
             assignedToUserId: userId === 'unassigned' ? null : userId,
