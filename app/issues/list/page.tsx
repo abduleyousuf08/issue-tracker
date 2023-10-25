@@ -5,11 +5,13 @@ import delay from 'delay';
 //*COMPONENTS
 import IssueStatusBadge from '../../components/IssueStatusBadge';
 import Link from '../../components/Link';
+import NextLink from 'next/link';
 import IssueActions from './IssueActions';
-import { Status } from '@prisma/client';
+import { Issue, Status } from '@prisma/client';
+import { ArrowUpIcon } from '@radix-ui/react-icons';
 
 interface Props {
-   searchParams: { status: Status };
+   searchParams: { status: Status; orderBy: keyof Issue };
 }
 
 async function IssuesPage({ searchParams }: Props) {
@@ -25,19 +27,40 @@ async function IssuesPage({ searchParams }: Props) {
       },
    });
 
+   const columns: {
+      label: String;
+      value: keyof Issue;
+      className?: string;
+   }[] = [
+      { label: 'Issue', value: 'title' },
+      { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
+      {
+         label: 'Created At',
+         value: 'createdAt',
+         className: 'hidden md:table-cell',
+      },
+   ];
+
    return (
       <>
          <IssueActions />
          <Table.Root variant='surface'>
             <TableHeader>
                <Table.Row>
-                  <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell className='hidden md:table-cell'>
-                     Status
-                  </Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell className='hidden md:table-cell'>
-                     Created At
-                  </Table.ColumnHeaderCell>
+                  {columns.map((column) => (
+                     <Table.ColumnHeaderCell key={column.value}>
+                        <NextLink
+                           href={{
+                              query: { ...searchParams, orderBy: column.value },
+                           }}
+                        >
+                           {column.label}
+                           {column.value === searchParams.orderBy && (
+                              <ArrowUpIcon className='inline ml-2' />
+                           )}
+                        </NextLink>
+                     </Table.ColumnHeaderCell>
+                  ))}
                </Table.Row>
             </TableHeader>
             <Table.Body>
