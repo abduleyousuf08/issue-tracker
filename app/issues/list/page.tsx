@@ -6,12 +6,27 @@ import delay from 'delay';
 import IssueStatusBadge from '../../components/IssueStatusBadge';
 import Link from '../../components/Link';
 import IssueActions from './IssueActions';
+import { Status } from '@prisma/client';
 
-async function IssuesPage() {
-   const issues = await prisma.issue.findMany();
+interface Props {
+   searchParams: { status: Status };
+}
+
+async function IssuesPage({ searchParams }: Props) {
+   //Todo:- checking if status is valid status!
+   const statuses = Object.values(Status);
+   const status = statuses.includes(searchParams.status)
+      ? searchParams.status
+      : undefined;
+
+   const issues = await prisma.issue.findMany({
+      where: {
+         status,
+      },
+   });
 
    return (
-      <div>
+      <>
          <IssueActions />
          <Table.Root variant='surface'>
             <TableHeader>
@@ -45,7 +60,7 @@ async function IssuesPage() {
                ))}
             </Table.Body>
          </Table.Root>
-      </div>
+      </>
    );
 }
 
