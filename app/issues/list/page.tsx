@@ -15,18 +15,6 @@ interface Props {
 }
 
 async function IssuesPage({ searchParams }: Props) {
-   //Todo:- checking if status is valid status!
-   const statuses = Object.values(Status);
-   const status = statuses.includes(searchParams.status)
-      ? searchParams.status
-      : undefined;
-
-   const issues = await prisma.issue.findMany({
-      where: {
-         status,
-      },
-   });
-
    const columns: {
       label: String;
       value: keyof Issue;
@@ -40,6 +28,26 @@ async function IssuesPage({ searchParams }: Props) {
          className: 'hidden md:table-cell',
       },
    ];
+
+   //Todo:- checking if status is valid status!
+   const statuses = Object.values(Status);
+   const status = statuses.includes(searchParams.status)
+      ? searchParams.status
+      : undefined;
+
+   //Todo:- checking if orderBy exist!
+   const orderBy = columns
+      .map((column) => column.value)
+      .includes(searchParams.orderBy)
+      ? { [searchParams.orderBy]: 'asc' }
+      : undefined;
+
+   const issues = await prisma.issue.findMany({
+      where: {
+         status,
+      },
+      orderBy,
+   });
 
    return (
       <>
