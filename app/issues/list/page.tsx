@@ -1,17 +1,18 @@
 import prisma from '@/prisma/client';
-import { Table, TableHeader } from '@radix-ui/themes';
-import delay from 'delay';
+import { Flex, Table, TableHeader } from '@radix-ui/themes';
 
 //*COMPONENTS
-import IssueStatusBadge from '../../components/IssueStatusBadge';
-import Link from '../../components/Link';
-import NextLink from 'next/link';
-import IssueActions from './IssueActions';
 import { Issue, Status } from '@prisma/client';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
+import NextLink from 'next/link';
+import IssueStatusBadge from '../../components/IssueStatusBadge';
+import Link from '../../components/Link';
+import IssueActions from './IssueActions';
+import Pagination from '@/app/components/Pagination';
 
+//! Don't change
 interface Props {
-   searchParams: { status: Status; orderBy: keyof Issue };
+   searchParams: { status: Status; orderBy: keyof Issue; page: string };
 }
 
 async function IssuesPage({ searchParams }: Props) {
@@ -42,15 +43,22 @@ async function IssuesPage({ searchParams }: Props) {
       ? { [searchParams.orderBy]: 'asc' }
       : undefined;
 
+   const page = +searchParams.page || 1;
+   const pageSize = 10;
+
    const issues = await prisma.issue.findMany({
       where: {
          status,
       },
       orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
    });
 
+   const issueCount = await prisma.issue.count({ where: { status } });
+
    return (
-      <>
+      <Flex direction={'column'} gap={'4'}>
          <IssueActions />
          <Table.Root variant='surface'>
             <TableHeader>
@@ -94,7 +102,12 @@ async function IssuesPage({ searchParams }: Props) {
                ))}
             </Table.Body>
          </Table.Root>
-      </>
+         <Pagination
+            pageSize={pageSize}
+            currentPage={page}
+            itemCount={issueCount}
+         />
+      </Flex>
    );
 }
 
