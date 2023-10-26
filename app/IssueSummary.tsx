@@ -16,7 +16,7 @@ function IssueSummary({ open, inProgress, closed }: Props) {
       status: Status;
    }[] = [
       { label: 'Open Issues', value: open, status: 'OPEN' },
-      { label: 'In_progress Issues', value: inProgress, status: 'IN_PROGRESS' },
+      { label: 'In Progress Issues', value: inProgress, status: 'IN_PROGRESS' },
       { label: 'Closed Issues', value: closed, status: 'CLOSED' },
    ];
 
