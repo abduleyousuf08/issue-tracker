@@ -4,9 +4,9 @@ import { Flex } from '@radix-ui/themes';
 //*COMPONENTS
 import Pagination from '@/app/components/Pagination';
 import { Issue, Status } from '@prisma/client';
+import { Metadata } from 'next';
 import IssueActions from './IssueActions';
 import IssueTable, { columnNames } from './IssueTable';
-import { Metadata } from 'next';
 
 //! Don't change
 interface Props {
